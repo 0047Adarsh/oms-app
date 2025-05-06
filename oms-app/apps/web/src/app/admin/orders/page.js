@@ -1,18 +1,47 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Card from '@/components/Card';
 import DataTable from '@/components/DataTable';
 import '@/styles/OrderTable.css';
 
 export default function AdminOrdersPage() {
+
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
+  }
+
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const res = await fetch('http://localhost:4000/api/orders');
+        const data = await res.json();
+        alert(data);
+        setOrders(data);
+      } catch (err) {
+        console.error('Failed to fetch orders:', err);
+        alert('Failed to load orders');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchOrders();
+  }, []);
+
   const columns = [
-    { header: 'Order ID', accessor: 'id' },
-    { header: 'Order Date', accessor: 'orderDate' },
-    { header: 'Customer', accessor: 'customerName' },
+    { header: 'Order ID', accessor: 'order_id' },
+    { header: 'Order Date', accessor: 'order_date', render: (row)=> formatDate(row.order_date) },
+    { header: 'Customer', accessor: 'customer_name' },
     { header: 'Phone', accessor: 'phone' },
-    { header: 'Bottle Type', accessor: 'bottleType' },
+    { header: 'Bottle Type', accessor: 'bottle_type' },
     { header: 'Qty', accessor: 'quantity' },
-    { header: 'Delivery Date', accessor: 'deliveryDate' },
+    { header: 'Delivery Date', accessor: 'delivery_date', render: (row)=> formatDate(row.delivery_date) },
     {
         header: 'Status',
         accessor: 'status',
@@ -27,40 +56,26 @@ export default function AdminOrdersPage() {
       },
     ];
 
-  const data = [
-    {
-      id: '#1001',
-      orderDate: 'Apr 1, 2025',
-      customerName: 'John Doe',
-      phone: '+91 98765 12345',
-      bottleType: '5L',
-      quantity: 2,
-      deliveryDate: 'Apr 5, 2025',
-      status: 'Processing',
-    },
-    {
-      id: '#1002',
-      orderDate: 'Apr 2, 2025',
-      customerName: 'Jane Smith',
-      phone: '+91 98765 67890',
-      bottleType: '1L',
-      quantity: 5,
-      deliveryDate: 'Apr 6, 2025',
-      status: 'Delivered',
-    },
-  ];
 
   const handleStatusUpdate = (order) => {
     alert(`Update status for ${order.id}`);
     // TODO: Open modal or call API to update status
   };
 
+  if (loading) {
+    return <p>Loading orders...</p>;
+  }
+
+  if (!orders.length && !loading) {
+    return <p className="text-gray-500">No orders found.</p>;
+  }
+
   return (
     <>
       <h2 className="text-2xl font-bold mb-6">Manage Orders</h2>
 
       <Card title="All Orders">
-        <DataTable columns={columns} data={data} onStatusUpdate={handleStatusUpdate} />
+        <DataTable columns={columns} data={orders} onStatusUpdate={handleStatusUpdate} />
       </Card>
     </>
   );
