@@ -1,12 +1,27 @@
-import express from "express";
-import cors from "cors";
-import bodyParser from "body-parser";
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import orderRoutes from './routes/orderRoutes.js';
+
 
 const app = express();
-const PORT = 6000;
+const PORT = process.env.PORT || 4000;
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cors());
+app.use(helmet());
+app.use(morgan('dev'));
 
-app.listen(PORT, ()=>{
-    console.log(`Port has succesfully`)
+// Basic route
+app.get('/', (req, res) => {
+  res.json({ message: 'Order Management API' });
+});
+
+// Routes
+app.use('/api/orders', orderRoutes);
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
