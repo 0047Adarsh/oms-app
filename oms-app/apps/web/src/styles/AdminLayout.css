@@ -1,0 +1,84 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-sidebar {
+  width: 240px;
+  background-color: #1f2937;
+  color: white;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.admin-sidebar.closed {
+  width: 60px;
+  padding: 1.5rem 0.5rem;
+}
+
+.admin-logo {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.admin-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #cbd5e1;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.admin-nav-link:hover {
+  background-color: #374151;
+}
+
+.admin-nav-icon {
+  font-size: 1.2rem;
+}
+
+.admin-main {
+  flex: 1;
+  background-color: #f9fafb;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background-color: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.admin-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.admin-title {
+  font-size: 1.25rem;
+  color: #111827;
+  flex-grow: 1;
+}
+
+.admin-content {
+  padding: 2rem;
+}
