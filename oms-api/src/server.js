@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import orderRoutes from './routes/orderRoutes.js';
+import complaintRoutes from './routes/complaintsRoutes.js'
 
 
 const app = express();
@@ -13,15 +14,14 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 
-// Basic route
 app.get('/', (req, res) => {
   res.json({ message: 'Order Management API' });
 });
 
-// Routes
 app.use('/api/orders', orderRoutes);
 
-// Start server
+app.use('/api/complaints', complaintRoutes);
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
