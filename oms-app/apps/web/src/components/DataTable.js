@@ -10,7 +10,6 @@ export default function DataTable({ columns, data, onStatusUpdate }) {
             {columns.map((col, i) => (
               <th key={i}>{col.header}</th>
             ))}
-            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -21,14 +20,14 @@ export default function DataTable({ columns, data, onStatusUpdate }) {
                   {col.render ? col.render(row) : row[col.accessor]}
                 </td>
               ))}
-              <td data-label="Action">
+              {/* <td data-label="Action">
                 <button
                   onClick={() => onStatusUpdate?.(row)}
                   className="order-action-btn"
                 >
                   🔄 Update
                 </button>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>

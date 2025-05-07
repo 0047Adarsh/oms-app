@@ -161,6 +161,99 @@
   }
   
   .status-badge.cancelled {
-    background-color: #fecaca; /* light red */
+    background-color: #fecaca;
     color: #991b1b;         
+  }
+
+  /* Container for all filters */
+.filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f9fafb;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Individual filter items */
+  .filter-item {
+    flex: 1 1 auto;
+    min-width: 200px;
+    max-width: 300px;
+  }
+  
+  .filter-item select,
+  .filter-item input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease-in-out;
+  }
+  
+  .filter-item select:focus,
+  .filter-item input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+  
+  /* Export Button */
+  .export-button {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background-color: #10b981; /* Emerald Green */
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .export-button:hover {
+    background-color: #059669;
+  }
+  
+  /* Clear Filters Button (optional) */
+  .clear-filters-btn {
+    flex: 0 0 auto;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    background-color: transparent;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .clear-filters-btn:hover {
+    background-color: #fef3c7;
+    color: #a16207;
+  }
+  
+  /* Responsive behavior */
+  @media (max-width: 768px) {
+    .filters-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .filter-item {
+      width: 100%;
+    }
+  
+    .export-button {
+      width: 100%;
+      justify-content: center;
+    }
   }
