@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Card from '@/components/Card';
 import DataTable from '@/components/DataTable';
-import StatusUpdateButton from '@/components/StatusUpdateButton';
+import ComplaintStatusUpdateButton from '@/components/StatusUpdateButton';
 import '@/styles/OrderTable.css';
 
 export default function AdminComplaintsPage() {
@@ -27,6 +27,7 @@ export default function AdminComplaintsPage() {
       try {
         const res = await fetch('http://localhost:4000/api/complaints');
         const data = await res.json();
+    
         setComplaints(data);
       } catch (err) {
         alert('Failed to load complaints');
@@ -124,12 +125,25 @@ export default function AdminComplaintsPage() {
     {
       header: 'Action',
       render: (row) => (
-        <StatusUpdateButton
+        <ComplaintStatusUpdateButton
           order={row}
           onUpdate={handleStatusUpdate}
         />
       )
-    }
+    } 
+    // {
+    //   header: 'Action',
+    //   render: (row) => (
+    //     <cComplaintStatusUpdateButton
+    //       complaint={row}
+    //       onUpdate={(updatedComplaint) => {
+    //         setComplaints((prev) =>
+    //           prev.map(c => c.complain_id === updatedComplaint.complain_id ? updatedComplaint : c)
+    //         );
+    //       }}
+    //     />
+    //   ),
+    // }
   ];
 
   const statusOptions = ['All', ...new Set(complaints.map(c => c.status))];

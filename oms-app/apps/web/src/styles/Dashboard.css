@@ -1,0 +1,64 @@
+/* Stat Cards */
+.stat-card {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.stat-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.stat-value {
+  margin-top: 0.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #111827;
+}
+
+.stat-trend {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.stat-icon {
+  font-size: 2rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge.open         { background-color: #fef3c7; color: #b45309; }
+.status-badge.processing  { background-color: #dbeafe; color: #1e40af; }
+.status-badge.under-review { background-color: #f3e8ff; color: #7e22ce; }
+.status-badge.resolved   { background-color: #dcfce7; color: #16a34a; }
+.status-badge.closed      { background-color: #f3f4f6; color: #4b5563; }
+
+.status-badge.order-placed { background-color: #bfdbfe; color: #1e40af; }
+.status-badge.packing     { background-color: #c7d2fe; color: #4338ca; }
+.status-badge.packed      { background-color: #d8b4fe; color: #7e22ce; }
+.status-badge.shipped     { background-color: #fef9c3; color: #a16207; }
+.status-badge.delivered   { background-color: #dcfce7; color: #16a34a; }
+.status-badge.cancelled   { background-color: #fecaca; color: #b91c1c; }

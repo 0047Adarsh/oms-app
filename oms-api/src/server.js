@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import orderRoutes from './routes/orderRoutes.js';
 import complaintRoutes from './routes/complaintsRoutes.js'
-
+import userRoutes from './routes/userRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -21,6 +21,8 @@ app.get('/', (req, res) => {
 app.use('/api/orders', orderRoutes);
 
 app.use('/api/complaints', complaintRoutes);
+
+app.use('/api/users', userRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
