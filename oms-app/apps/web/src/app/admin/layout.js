@@ -47,6 +47,10 @@ export default function AdminLayout({ children }) {
             <span className="admin-nav-icon">{<HelpIcon/>}</span>
             {sidebarOpen && <span>Complaints</span>}
           </Link>
+          <Link href="/admin/users" className="admin-nav-link">
+            <span className="admin-nav-icon">{<HelpIcon/>}</span>
+            {sidebarOpen && <span>Customers</span>}
+          </Link>
         </nav>
       </aside>
 

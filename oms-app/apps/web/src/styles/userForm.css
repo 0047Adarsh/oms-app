@@ -1,0 +1,106 @@
+/* Futuristic Input Fields */
+.input-futuristic {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(125, 125, 125, 0.3);
+    border-radius: 9999px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
+  
+  .input-futuristic:focus {
+    outline: none;
+    border-color: #6366f1; /* Indigo-500 */
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    background: white;
+  }
+  
+  /* Floating Label Wrapper */
+  .floating-label {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .floating-label input:focus ~ label,
+  .floating-label input:not(:placeholder-shown) ~ label {
+    top: -0.75rem;
+    left: 0.75rem;
+    font-size: 0.75rem;
+    background: white;
+    padding: 0 0.25rem;
+    color: #6366f1;
+  }
+  
+  .floating-label label {
+    position: absolute;
+    top: 0.75rem;
+    left: 1rem;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: #6b7280; /* gray-500 */
+    font-size: 1rem;
+  }
+
+  .btn-futuristic {
+    background: linear-gradient(135deg, #6366f1, #a855f7); /* indigo -> violet */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .btn-futuristic:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+  }
+  
+  .btn-outline {
+    background: transparent;
+    border: 1px solid #6366f1;
+    color: #6366f1;
+  }
+  
+  .btn-outline:hover {
+    background: #6366f1;
+    color: white;
+  }
+
+  .card-futuristic {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(243, 244, 246, 0.9));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(125, 135, 206, 0.2);
+  }
+
+  .volume-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(99, 102, 241, 0.1);
+  color: #4f46e5;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.volume-badge.active {
+  background: #6366f1;
+  color: white;
+}
+
+.volume-badge:hover {
+  background: #a855f7;
+  color: white;
+}
