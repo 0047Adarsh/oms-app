@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import Card from '@/components/Card';
 import DataTable from '@/components/DataTable';
-import StatusUpdateButton from '@/components/StatusUpdateButton';
+import ComplaintStatusUpdateButton from '@/components/ComplaintStatusUpdateButton';
 import '@/styles/OrderTable.css';
+import SearchIcon from '@mui/icons-material/Search';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 export default function AdminComplaintsPage() {
   const [complaints, setComplaints] = useState([]);
@@ -13,19 +15,19 @@ export default function AdminComplaintsPage() {
   const [filterStatus, setFilterStatus] = useState('All');
 
   const statusFlow = {
-    Open: 'Processing',
-    Processing: 'Under Review',
+    'Open': 'Processing',
+    'Processing': 'Under Review',
     'Under Review': 'Resolved',
-    Resolved: 'Resolved',
-    Closed: 'Closed'
+    'Resolved': 'Resolved',
+    'Closed': 'Closed'
   };
 
-  // Fetch complaints
   useEffect(() => {
     async function fetchComplaints() {
       try {
         const res = await fetch('http://localhost:4000/api/complaints');
         const data = await res.json();
+    
         setComplaints(data);
       } catch (err) {
         alert('Failed to load complaints');
@@ -120,12 +122,12 @@ export default function AdminComplaintsPage() {
     {
       header: 'Action',
       render: (row) => (
-        <StatusUpdateButton
+        <ComplaintStatusUpdateButton
           order={row}
-          onUpdate={handleStatusUpdate}
+          onUpdate={handleStatusUpdate} 
         />
       )
-    }
+    } 
   ];
 
   const statusOptions = ['All', ...new Set(complaints.map(c => c.status))];
@@ -138,13 +140,15 @@ export default function AdminComplaintsPage() {
       <h2 className="text-2xl font-bold mb-6">Manage Complaints</h2>
 
       <div className="filters-container">
-        <div className="filter-item">
+        <div className="relative search-container">
           <input
             type="text"
             placeholder="Search by Complaint ID or Customer"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
           />
+          <span className="search-icon"><SearchIcon/></span>
         </div>
 
         <div className="filter-item">
@@ -165,7 +169,7 @@ export default function AdminComplaintsPage() {
             onClick={() => exportToCSV(filteredComplaints)}
             className="export-button"
           >
-            📥 Export
+            <FileDownloadIcon/> Export
           </button>
 
           {(searchQuery || filterStatus !== 'All') && (

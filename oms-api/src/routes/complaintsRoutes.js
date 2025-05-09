@@ -14,8 +14,9 @@ router.get('/', async (req, res) => {
 });
 
 router.patch('/:id/status', async (req, res) => {
+  console.log(req.params)
   const { id } = req.params;
-  const { status, resolution_notes } = req.body;
+  const { status } = req.body;
 
   if (!status) {
     return res.status(400).json({ error: 'Status is required' });
@@ -23,10 +24,10 @@ router.patch('/:id/status', async (req, res) => {
 
   try {
     const result = await pool.query(
-      `UPDATE public.complaints
+      `UPDATE complaints
        SET status = $1, resolution_notes = $2, resolution_date = CASE WHEN $1 = 'Resolved' THEN NOW() ELSE resolution_date END, updated_at = NOW()
        WHERE complain_id = $3 RETURNING *`,
-      [status, resolution_notes, id]
+      [status, id]
     );
 
     if (result.rows.length === 0) {
