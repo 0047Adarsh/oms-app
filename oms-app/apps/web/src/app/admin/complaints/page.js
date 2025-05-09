@@ -12,7 +12,6 @@ export default function AdminComplaintsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
 
-  // Status flow for complaints
   const statusFlow = {
     Open: 'Processing',
     Processing: 'Under Review',
@@ -39,13 +38,11 @@ export default function AdminComplaintsPage() {
     fetchComplaints();
   }, []);
 
-  // Format date
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
-  // Filter logic
   const filteredComplaints = complaints.filter((c) => {
     const matchesSearch =
       c.complain_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -56,7 +53,6 @@ export default function AdminComplaintsPage() {
     return matchesSearch && matchesStatus;
   });
 
-  // Export to CSV
   const exportToCSV = (data) => {
     const csvRows = [];
     csvRows.push([
@@ -169,7 +165,7 @@ export default function AdminComplaintsPage() {
             onClick={() => exportToCSV(filteredComplaints)}
             className="export-button"
           >
-            📥 Export to CSV
+            📥 Export
           </button>
 
           {(searchQuery || filterStatus !== 'All') && (
