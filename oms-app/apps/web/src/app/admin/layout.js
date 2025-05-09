@@ -13,6 +13,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import PersonIcon from '@mui/icons-material/Person';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -46,6 +48,10 @@ export default function AdminLayout({ children }) {
           <Link href="/admin/complaints" className="admin-nav-link">
             <span className="admin-nav-icon">{<HelpIcon/>}</span>
             {sidebarOpen && <span>Complaints</span>}
+          </Link>
+          <Link href="/admin/users" className="admin-nav-link">
+            <span className="admin-nav-icon">{<PersonIcon/>}</span>
+            {sidebarOpen && <span>Customers</span>}
           </Link>
         </nav>
       </aside>
@@ -85,7 +91,7 @@ export default function AdminLayout({ children }) {
   {/* User Avatar with Dropdown */}
   <div className="user-dropdown">
     <button className="user-avatar" aria-label="User menu">
-      <span>J D</span>
+      <span><AccountCircleIcon/></span>
     </button>
 
     <div className="dropdown-menu">

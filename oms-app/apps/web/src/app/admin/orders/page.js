@@ -5,6 +5,9 @@ import Card from '@/components/Card';
 import DataTable from '@/components/DataTable';
 import StatusUpdateButton from '@/components/StatusUpdateButton';
 import '@/styles/OrderTable.css';
+import SearchIcon from '@mui/icons-material/Search';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 
 export default function AdminOrdersPage() {
 
@@ -97,37 +100,7 @@ export default function AdminOrdersPage() {
           );
         },
       },
-    // {
-//     {
-//   header: 'Status',
-//   accessor: 'status',
-//   render: (row) => (
-//     <StatusUpdateButton
-//       order={row}
-//       onUpdate={(updatedOrder) => {
-//         setOrders(orders.map(o => o.order_id === updatedOrder.orderId ? updatedOrder : o));
-//       }}
-//     />
-//   ),
-// },,
-//     ];
-// {
-//     header: 'Action',
-//     accessor: 'action',
-//     render: (row) => {
-//       const isTerminal = ['Delivered', 'Cancelled'].includes(row.status);
-
-//       return (
-//         <button
-//           onClick={() => handleStatusUpdate(row)}
-//           disabled={isTerminal}
-//           className={`btn-sm ${isTerminal ? 'btn-disabled' : 'btn-primary'}`}
-//         >
-//           {isTerminal ? 'No Action' : 'Update Status'}
-//         </button>
-//       );
-//     }
-//   }
+   
 {
     header: 'Action',
     accessor: 'action',
@@ -135,7 +108,7 @@ export default function AdminOrdersPage() {
       <StatusUpdateButton
         order={row}
         onUpdate={(updatedOrder) => {
-          setOrders(orders.map(o => o.orderId === updatedOrder.orderId ? updatedOrder : o));
+          setOrders(orders.map(o => o.order_id === updatedOrder.order_id ? updatedOrder : o));
         }}
       />
     ),
@@ -196,17 +169,17 @@ export default function AdminOrdersPage() {
         </div> */}
 
 <div className="filters-container">
-  {/* Search Input */}
-  <div className="filter-item">
+  <div className="relative search-container">
     <input
       type="text"
       placeholder="Search by Order ID or Customer"
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
+      className="search-input"
     />
+    <span className="search-icon"><SearchIcon/></span>
   </div>
 
-  {/* Status Filter */}
   <div className="filter-item">
     <select
       value={filterStatus}
@@ -222,10 +195,9 @@ export default function AdminOrdersPage() {
     </select>
   </div>
 
-  {/* Export + Clear Buttons */}
   <div className="flex gap-2">
     <button className="export-button" onClick={() => exportToCSV(filteredOrders)}>
-      📥 Export to CSV
+      <FileDownloadIcon/> Export
     </button>
 
     {(searchQuery || filterStatus !== 'All') && (

@@ -1,10 +1,10 @@
+// components/OrderStatusUpdateButton.js
+
 'use client';
 
 import { useState } from 'react';
-import '@/styles/AdminLayout.css';
 
-
-export default function StatusUpdateButton({ order, onUpdate }) {
+export default function OrderStatusUpdateButton({ order, onUpdate }) {
   const statusFlow = {
     'Order Placed': 'Packing',
     'Packing': 'Packed',
@@ -15,52 +15,54 @@ export default function StatusUpdateButton({ order, onUpdate }) {
   };
 
   const nextStatus = statusFlow[order.status];
-
-  const [status, setStatus] = useState(order.status);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState(order);
+
+  const isTerminal = ['Delivered', 'Cancelled'].includes(currentOrder.status);
 
   const handleStatusUpdate = async () => {
-    const newStatus = statusFlow[status];
-    
-    if (newStatus === status) return;
+    if (isTerminal || nextStatus === currentOrder.status) return;
 
     setIsUpdating(true);
 
     try {
-      const res = await fetch(`http://localhost:4000/api/orders/${order.order_id}/status`, {
+      const res = await fetch(`http://localhost:4000/api/orders/${currentOrder.order_id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ status: nextStatus })
       });
 
-      if (!res.ok) throw new Error('Failed to update');
+      if (!res.ok) throw new Error('Update failed');
 
       const result = await res.json();
 
-      setStatus(newStatus);
+      setCurrentOrder(result.order);
       onUpdate?.(result.order);
     } catch (err) {
-      alert('Failed to update status');
+      alert('Failed to update status. Check console for details.');
+      console.error(err);
     } finally {
       setIsUpdating(false);
     }
   };
 
-  const isTerminalStatus = ['Delivered', 'Cancelled'].includes(status);
-
-  const statusClass = status.toLowerCase().replace(/\s+/g, '-');
+  const statusClass = currentOrder.status.toLowerCase().replace(/\s+/g, '-');
 
   return (
-    <div>
-      {/* <span className={`status-badge ${statusClass} inline-block mb-2`}>{status}</span> */}
+    <div className="flex flex-col items-start">
+      {/* <span className={`status-badge ${statusClass}`}>
+        {currentOrder.status}
+      </span> */}
 
-      <button
-        onClick={handleStatusUpdate}
-        disabled={isTerminalStatus}
-        className={`btn-sm ${isTerminalStatus ? 'btn-disabled' : 'btn-primary'}`}
-      >
-        {isUpdating ? 'Updating...' : isTerminalStatus ? 'Final Status' : 'Update'}
-      </button>
+      {!isTerminal && (
+        <button
+          onClick={handleStatusUpdate}
+          disabled={isTerminal}
+          className={`btn-sm mt-2 ${isTerminal ? 'btn-disabled' : 'btn-primary'}`}
+        >
+          {isUpdating ? 'Updating...' : `${nextStatus}`}
+        </button>
+      )}
     </div>
   );
 }
