@@ -296,3 +296,11 @@
     align-items: center;
     justify-content: center;
   }
+
+
+.resolution-notes-cell {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

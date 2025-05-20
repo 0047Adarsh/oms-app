@@ -117,13 +117,25 @@ export default function AdminComplaintsPage() {
         );
       }
     },
+    { 
+      header: 'Resolution Notes', 
+      accessor: 'resolution_notes',
+      render: (row) => {
+        const notes = row.resolution_notes || '-';
+        return (
+          <span title={notes} className="max-w-xs truncate">
+            {notes || '-'}
+          </span>
+        );
+      }
+    },
     { header: 'Complaint Date', render: (row) => formatDate(row.complaint_date) },
     { header: 'Resolution Date', render: (row) => row.resolution_date ? formatDate(row.resolution_date) : '-' },
     {
       header: 'Action',
       render: (row) => (
         <ComplaintStatusUpdateButton
-          order={row}
+          complaint={row}
           onUpdate={handleStatusUpdate} 
         />
       )
