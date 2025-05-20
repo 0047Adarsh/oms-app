@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from 'react';
 
+
 export default function ComplaintStatusUpdateButton({ complaint, onUpdate }) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentComplaint, setCurrentComplaint] = useState(complaint);
+  const [resolutionNotes, setResolutionNotes] = useState('');
 
   useEffect(() => {
     if (complaint) {
       setCurrentComplaint(complaint);
+      setResolutionNotes(complaint.resolution_notes || '');
     }
   }, [complaint]);
 
@@ -59,9 +62,17 @@ export default function ComplaintStatusUpdateButton({ complaint, onUpdate }) {
 
   return (
     <div className="flex flex-col items-start">
-      <span className={`status-badge ${statusClass}`}>
+      {/* <span className={`status-badge ${statusClass}`}>
         {currentComplaint.status}
-      </span>
+      </span> */}
+
+<textarea
+        value={resolutionNotes}
+        onChange={(e) => setResolutionNotes(e.target.value)}
+        placeholder="Enter resolution notes..."
+        className="w-full p-2 border border-gray-300 rounded mt-2 text-sm"
+        disabled={isTerminal}
+      />
 
       {!isTerminal && (
         <button
@@ -74,7 +85,7 @@ export default function ComplaintStatusUpdateButton({ complaint, onUpdate }) {
             : isTerminal
             ? 'No Action'
             : nextStatus
-            ? `Set to "${nextStatus}"`
+            ? `${nextStatus}`
             : 'No Next Status'}
         </button>
       )}

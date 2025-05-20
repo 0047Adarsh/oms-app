@@ -24,7 +24,7 @@ export default function AdminOrdersPage() {
 
   const filteredOrders = orders.filter((order) => {
     const matchesSearch =
-      order.order_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      // order.order_id.includes(searchQuery.toLowerCase()) ||
       order.customer_name.toLowerCase().includes(searchQuery.toLowerCase());
   
     const matchesStatus = filterStatus === 'All' || order.status === filterStatus;
