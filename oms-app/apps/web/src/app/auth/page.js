@@ -5,24 +5,74 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const [password, setPassword] = useState('');
+  // const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
   const router = useRouter();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const email = formData.get('email');
-    const pwd = formData.get('password');
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.target);
+  //   const email = formData.get('email');
+  //   const pwd = formData.get('password');
 
-    if (!email || !pwd) {
-      alert('Please enter both email and password.');
+  //   if (!email || !pwd) {
+  //     alert('Please enter both email and password.');
+  //     return;
+  //   }
+  //   router.push('/admin/orders');
+  //   console.log({ email, password: pwd });
+  //   alert('Logged in successfully (mock)');
+  // };
+
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+
+  //   const validEmail = 'admin@example.com';
+  //   const validPassword = 'password123';
+
+  //   const formData = new FormData(e.target);
+  //   const email = formData.get('email');
+  //   const pwd = formData.get('password');
+
+  //   if (email === validEmail && password === validPassword) {
+  //     document.cookie = 'isAdminLoggedIn=true; path=/';
+  //     router.push('/admin/orders');
+  //   } else {
+  //     setError('Invalid credentials. Try admin@example.com / password123');
+  //   }
+  // };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleLogin = async (e) => {
+  e.preventDefault();
+  
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (res.status === 401 || res.status === 400) {
+      setError('Invalid credentials');
       return;
     }
+
     router.push('/admin/orders');
-    console.log({ email, password: pwd });
-    alert('Logged in successfully (mock)');
-  };
+  } catch (err) {
+    setError('Something went wrong. Please try again.');
+  }
+};
 
   return (
     <div className="login-container">
@@ -30,11 +80,12 @@ export default function LoginPage() {
       
         <div className="login-welcome">
           <h1 className="login-welcome-title">Welcome Back</h1>
-          <p className="login-welcome-text">Hello Welcome@</p>
+          <p className="login-welcome-text">Sign in to manage orders and complaints</p>
         </div>
 
         <div className="login-form-wrapper">
           <form onSubmit={handleLogin} className="login-form">
+          {/* <form action="/login" method="POST" className="login-form"> */}
             <h2 className="login-title">Sign In</h2>
 
             <div>
@@ -45,7 +96,9 @@ export default function LoginPage() {
                 type="email"
                 required
                 className="login-input"
-                placeholder="you@example.com"
+                placeholder="you@example.com" 
+                value={formData.email}
+                onChange={handleChange}
               />
             </div>
 
@@ -80,8 +133,8 @@ export default function LoginPage() {
                     id="password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={formData.password}
+                    onChange={handleChange}
                     required
                     minLength={6}
                     className="login-input login-input-password"
