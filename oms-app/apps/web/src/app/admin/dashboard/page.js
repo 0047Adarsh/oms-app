@@ -159,7 +159,7 @@ export default function AdminDashboardPage() {
         ))}
         </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="Recent Orders" className="bg-white shadow-md">
           <DataTable columns={orderColumns} data={recentOrders} />
         </Card>
