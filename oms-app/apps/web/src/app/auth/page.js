@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   // const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -63,12 +64,18 @@ export default function LoginPage() {
       body: JSON.stringify(formData),
     });
 
-    if (res.status === 401 || res.status === 400) {
-      setError('Invalid credentials');
-      return;
-    }
+    // if (res.status === 401 || res.status === 400) {
+    //   setError('Invalid credentials');
+    //   return;
+    // }
 
-    router.push('/admin/orders');
+    // router.push('/admin/orders');
+    if (res.ok) {
+      alert("Working")
+      router.push('/');
+    } else {
+      setError('Invalid credentials');
+    }
   } catch (err) {
     setError('Something went wrong. Please try again.');
   }
@@ -156,6 +163,8 @@ export default function LoginPage() {
               Sign In
             </button>
           </form>
+          {error && <p className="login-error">{error}</p>}
+
           <p className="login-footer">
             © {new Date().getFullYear()} Order Management System
           </p>

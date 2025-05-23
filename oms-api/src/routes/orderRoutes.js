@@ -37,6 +37,6 @@ router.patch('/:id/status', async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Failed to update order status' });
   }
-});
+}); 
 
 export default router;

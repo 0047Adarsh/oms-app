@@ -1,53 +1,20 @@
-// import { NextResponse } from 'next/server';
-// import { cookies } from 'next/headers';
-// import { createMiddlewareClient } from '@supabase/ssr';
-
-// export async function middleware(request) {
-//   const url = request.nextUrl.clone();
-
-//   if (url.pathname.startsWith('/admin')) {
-//     const cookieStore = await cookies();
-//     const isAdminLoggedIn = cookieStore.get('isAdminLoggedIn')?.value === 'true';
-
-//     if (!isAdminLoggedIn) {
-//       url.pathname = '/auth';
-//       return NextResponse.redirect(url);
-//     }
-//   }
-
-//   return NextResponse.next();
-// }
-
-// export const config = {
-//   matcher: ['/admin/:path*', '/dashboard/:path*'],
-// };
-
 // middleware.js
-
 import { NextResponse } from 'next/server';
-import { createMiddlewareClient } from '@supabase/ssr';
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
-export async function middleware(request) {
-  let response = NextResponse.next();
+export async function middleware(req) {
+  const res = NextResponse.next();
+  const supabase = createMiddlewareClient({ req, res });
 
-  const supabase = createMiddlewareClient({ req: request, res: response });
+  const { data: { user } } = await supabase.auth.getUser();
 
-  await supabase.auth.getSession();
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  const url = request.nextUrl.clone();
-
-  if (url.pathname.startsWith('/admin') && !session) {
-    url.pathname = '/auth';
-    return NextResponse.redirect(url);
+  if (!user && req.nextUrl.pathname.startsWith('/admin')) {
+    return NextResponse.redirect(new URL('/auth', req.url));
   }
 
-  return response;
+  return res;
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/dashboard/:path*'],
+  matcher: ['/admin/:path*'], 
 };
