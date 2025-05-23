@@ -4,7 +4,7 @@ import supabase from '../db/supabaseClient.js';
 export const getAllOrders = async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('orders')
+      .from('public.orders')
       .select('*')
       .order('order_date', { ascending: false });
 
