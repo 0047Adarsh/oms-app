@@ -1,41 +1,68 @@
-// apps/web/src/app/api/login/route.js
+// import { NextResponse } from 'next/server';
+// import { createClient } from '@supabase/supabase-js';
 
-import { redirect } from 'next/navigation';
+// const supabase = createClient(
+//   process.env.NEXT_PUBLIC_SUPABASE_URL,
+//   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+// );
+
+// export async function POST(request) {
+//   const { email, password } = await request.json();
+
+//   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+//   if (error || !data?.session) {
+//     return NextResponse.json({ success: false, message: error?.message || 'Login failed' }, { status: 401 });
+//   }
+
+//   // Optionally, set a cookie here (if you want persistent login on the client)
+//   return NextResponse.json({ success: true, user: data.user });
+// }
+
+// /app/api/login/route.js
+
+// import { cookies } from 'next/headers';
+// import { NextResponse } from 'next/server';
+// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+
+// export async function POST(req) {
+//   const { email, password } = await req.json();
+
+//   // const supabase = createServerComponentClient({ cookies });
+//    const cookieStore = await cookies();
+
+//   const supabase = createServerComponentClient({ cookies: () => cookieStore });
+
+//   const { data, error } = await supabase.auth.signInWithPassword({
+//     email,
+//     password,
+//   });
+
+//   if (error || !data.session) {
+//     return NextResponse.json({ success: false, message: error?.message || 'Login failed' }, { status: 401 });
+//   }
+
+//   return NextResponse.json({ success: true });
+// }
+
+// app/api/login/route.js
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-  let email, password;
+  const requestUrl = new URL(request.url);
+  const supabase = createRouteHandlerClient({ cookies });
 
-  const contentType = request.headers.get('Content-Type');
+  const { email, password } = await request.json();
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (contentType.includes('application/json')) {
-    // If request is JSON
-    const body = await request.json();
-    email = body.email;
-    password = body.password;
-  } else if (contentType.includes('application/x-www-form-urlencoded')) {
-    // If request is FormData (from HTML form)
-    const formData = await request.formData();
-    email = formData.get('email');
-    password = formData.get('password');
-  } else {
-    return new Response('Unsupported content type', { status: 400 });
+
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 401 });
   }
 
-  // Simulate fake login
-  if (email === 'admin@example.com' && password === 'password123') {
-    const cookieStore = await cookies();
-
-    cookieStore.set('isAdminLoggedIn', 'true', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',  
-      maxAge: 60 * 60 * 24 * 7, // 1 week
-      path: '/',
-    });
-
-    return redirect('/admin/orders');
-  }
-
-  // Invalid credentials → redirect back with error
-  return redirect('/auth?error=invalid_credentials');
+  return NextResponse.json({ success: true });
 }
+
