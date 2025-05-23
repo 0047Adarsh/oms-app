@@ -22,7 +22,7 @@ app.use('/api/orders', orderRoutes);
 
 app.use('/api/complaints', complaintRoutes);
 
-app.use('/api/users', userRoutes);
+app.use('/api/customers', userRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);

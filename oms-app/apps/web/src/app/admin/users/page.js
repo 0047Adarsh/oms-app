@@ -7,8 +7,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import '@/styles/userTable.css';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
-export default function AdminUsersPage() {
-  const [users, setUsers] = useState([]);
+export default function AdminCustomersPage() {
+  const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [editedUser, setEditedUser] = useState(null);
@@ -16,11 +16,11 @@ export default function AdminUsersPage() {
 
 
   useEffect(() => {
-    async function fetchUsers() {
+    async function fetchCustomers() {
       try {
-        const res = await fetch('http://localhost:4000/api/users');
+        const res = await fetch('http://localhost:4000/api/customers');
         const data = await res.json();
-        setUsers(data);
+        setCustomers(data);
       } catch (err) {
         console.error('Failed to load users:', err);
       } finally {
@@ -28,15 +28,15 @@ export default function AdminUsersPage() {
       }
     }
 
-    fetchUsers();
+    fetchCustomers();
   }, []);
 
   const handleSave = async () => {
     try {
       const method = editingId === 'new' ? 'POST' : 'PATCH';
       const url = editingId === 'new'
-        ? `http://localhost:4000/api/users`
-        : `http://localhost:4000/api/users/${editingId}`;
+        ? `http://localhost:4000/api/customers`
+        : `http://localhost:4000/api/customers/${editingId}`;
   
       const res = await fetch(url, {
         method,
@@ -55,9 +55,9 @@ export default function AdminUsersPage() {
       const updatedUser = await res.json();
   
       if (method === 'POST') {
-        setUsers(prev => [...prev, updatedUser]);
+        setCustomers(prev => [...prev, updatedUser]);
       } else {
-        setUsers(prev => prev.map(u => u.id === updatedUser.id ? updatedUser : u));
+        setCustomers(prev => prev.map(u => u.id === updatedUser.id ? updatedUser : u));
       }
   
       setEditingId(null);
@@ -114,7 +114,7 @@ export default function AdminUsersPage() {
   // };
 
 
-  const filteredUsers = users.filter(u =>
+  const filteredCustomers = customers.filter(u =>
     u.customer_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     u.phone?.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -215,7 +215,7 @@ export default function AdminUsersPage() {
       accessor: 'bottle_volumes',
       render: (row) => {
         const isEditing = editingId === row.id;
-        const volumeOptions = ['250ml', '500ml', '750ml'];
+        const volumeOptions = ['250mL', '500mL', '750mL'];
 
         if (isEditing) {
           return (
@@ -323,7 +323,7 @@ export default function AdminUsersPage() {
 
       {/* Users Table */}
       <Card title="All Users" className="overflow-hidden">
-        <DataTable columns={columns} data={filteredUsers} />
+        <DataTable columns={columns} data={filteredCustomers} />
       </Card>
     </div>
   );
