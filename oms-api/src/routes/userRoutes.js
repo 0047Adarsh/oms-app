@@ -8,11 +8,11 @@ const router = express.Router();
 // GET all users
 router.get('/', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM public.users ORDER BY created_at DESC');
+    const result = await pool.query('SELECT * FROM public.customers ORDER BY created_at DESC');
     res.json(result.rows);
   } catch (err) {
-    console.error('GET /api/users failed:', err.message);
-    res.status(500).json({ error: 'Failed to fetch users' });
+    console.error('GET /api/customers failed:', err.message);
+    res.status(500).json({ error: 'Failed to fetch customers' });
   }
 });
 
@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
 
   try {
     const result = await pool.query(
-      `INSERT INTO public.users (
+      `INSERT INTO public.customers (
         customer_name, phone, moq, buffer_days, bottle_volumes, password
       ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
       [customer_name, phone, moq || 10, buffer_days || 3, JSON.stringify(bottle_volumes), password]
@@ -39,7 +39,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PATCH update user
 router.patch('/:id', async (req, res) => {
   const { id } = req.params;
   const updates = req.body;
@@ -52,7 +51,7 @@ router.patch('/:id', async (req, res) => {
 
   try {
     const result = await pool.query(
-      `UPDATE public.users SET ${setClause}, updated_at = NOW() WHERE id = $${keys.length + 1} RETURNING *`,
+      `UPDATE public.customers SET ${setClause}, updated_at = NOW() WHERE id = $${keys.length + 1} RETURNING *`,
       [...values, id]
     );
 
@@ -62,7 +61,7 @@ router.patch('/:id', async (req, res) => {
 
     res.json(result.rows[0]);
   } catch (error) {
-    console.error('PATCH /api/users/:id failed:', error.message);
+    console.error('PATCH /api/customers/:id failed:', error.message);
     res.status(500).json({ error: 'Failed to update user' });
   }
 });
