@@ -4,7 +4,7 @@ import supabase from '../db/supabaseClient.js';
 export const getAllOrders = async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('public.orders')
+      .from('orders')
       .select('*')
       .order('order_date', { ascending: false });
 
@@ -35,6 +35,7 @@ export const updateOrderStatus = async (req, res) => {
 
     if (error) throw error;
 
+    console.log("✅ Fetched Orders:", data);
     res.json({ message: 'Status updated', order: data });
   } catch (error) {
     console.error(`Error updating order ${id}:`, error.message);
