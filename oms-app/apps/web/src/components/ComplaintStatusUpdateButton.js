@@ -58,6 +58,35 @@ export default function ComplaintStatusUpdateButton({ complaint, onUpdate }) {
     }
   };
 
+  const handleNoteSave = async () => {
+  // if (isTerminal) return;
+
+  try {
+    
+    const res = await fetch(`http://localhost:4000/api/complaints/${currentComplaint.complain_id}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        resolution_notes: resolutionNotes.trim() || null
+      })
+    });
+
+    if (!res.ok) throw new Error('Failed to save notes');
+
+    const result = await res.json();
+    const updatedComplaint = result.complaint || result;
+
+    setCurrentComplaint(updatedComplaint);
+    onUpdate?.(updatedComplaint);
+
+    alert('Notes saved successfully!');
+  } catch (err) {
+    alert('Failed to save notes. Check console for details.');
+    console.error('Note save failed:', err);
+  }
+};
+
+
   const statusClass = currentComplaint.status.toLowerCase().replace(/\s+/g, '-');
 
   return (
@@ -66,13 +95,32 @@ export default function ComplaintStatusUpdateButton({ complaint, onUpdate }) {
         {currentComplaint.status}
       </span> */}
 
-<textarea
+    <textarea
         value={resolutionNotes}
         onChange={(e) => setResolutionNotes(e.target.value)}
         placeholder="Enter resolution notes..."
         className="w-full p-2 border border-gray-300 rounded mt-2 text-sm"
-        disabled={isTerminal}
+        // disabled={isTerminal}
       />
+      
+      {/* {!isTerminal && (
+      <button
+        onClick={handleNoteSave}
+        className="btn-sm mt-2 btn-secondary"
+        disabled={!resolutionNotes.trim()}
+      >
+        Save Notes
+      </button>
+    )} */}
+
+    
+      <button
+        onClick={handleNoteSave}
+        className="btn-sm mt-2 btn-secondary"
+      >
+        Save Notes
+      </button>
+
 
       {!isTerminal && (
         <button

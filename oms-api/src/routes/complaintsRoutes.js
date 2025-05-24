@@ -98,42 +98,92 @@ router.get('/', async (req, res) => {
 });
 
 // PATCH update complaint status
+// router.patch('/:id/status', async (req, res) => {
+//   const { id } = req.params;
+//   const { status } = req.body;
+//   const resolution_notes = "Nothing";
+
+//   if (!status) {
+//     return res.status(400).json({ error: 'Status is required' });
+//   }
+
+//   try {
+//     const { data, error } = await supabase
+//       .from('complaints')
+//       .update({
+//         status,
+//         resolution_notes,
+//         resolution_date: status === 'Resolved' ? new Date().toISOString() : undefined,
+//         updated_at: new Date().toISOString()
+//       })
+//       .eq('complain_id', id)
+//       .select()
+//       .single();
+
+//     if (error) {
+//       if (error.code === 'PGRST106') {
+//         // No rows found
+//         return res.status(404).json({ error: 'Complaint not found' });
+//       }
+//       console.error('Supabase error:', error);
+//       return res.status(500).json({ error: 'Failed to update complaint status' });
+//     }
+
+//     res.json({ message: 'Status updated', complaint: data });
+//   } catch (err) {
+//     console.error('Unexpected error:', err.message);
+//     res.status(500).json({ error: 'An unexpected error occurred' });
+//   }
+// });
+
 router.patch('/:id/status', async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
-  const resolution_notes = "Nothing";
-
-  if (!status) {
-    return res.status(400).json({ error: 'Status is required' });
-  }
+  const { status, resolution_notes } = req.body;
 
   try {
+    const updateData = {};
+
+    if (status !== undefined && status !== null) {
+      updateData.status = status;
+      updateData.updated_at = new Date().toISOString();
+    }
+
+    // Only update resolution_notes if provided
+    if (resolution_notes !== undefined && resolution_notes !== null) {
+      updateData.resolution_notes = resolution_notes.trim() || '';
+    }
+
+    // Set resolution_date only if status is "Resolved"
+    if (updateData.status === 'Resolved') {
+      updateData.resolution_date = new Date().toISOString();
+    }
+
+    // If no data to update
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({ error: 'No update data provided' });
+    }
+
+    // Perform the update
     const { data, error } = await supabase
       .from('complaints')
-      .update({
-        status,
-        resolution_notes,
-        resolution_date: status === 'Resolved' ? new Date().toISOString() : undefined,
-        updated_at: new Date().toISOString()
-      })
+      .update(updateData)
       .eq('complain_id', id)
       .select()
       .single();
 
     if (error) {
       if (error.code === 'PGRST106') {
-        // No rows found
         return res.status(404).json({ error: 'Complaint not found' });
       }
-      console.error('Supabase error:', error);
-      return res.status(500).json({ error: 'Failed to update complaint status' });
+      throw error;
     }
 
-    res.json({ message: 'Status updated', complaint: data });
+    res.json({ message: 'Complaint updated successfully', complaint: data });
   } catch (err) {
-    console.error('Unexpected error:', err.message);
-    res.status(500).json({ error: 'An unexpected error occurred' });
+    console.error('Error updating complaint:', err.message);
+    res.status(500).json({ error: 'Failed to update complaint' });
   }
 });
+
 
 export default router;
