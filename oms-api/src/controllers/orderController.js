@@ -1,5 +1,6 @@
 // controllers/orderController.js
 import supabase from '../db/supabaseClient.js';
+import { sendWhatsAppMessage } from '../utils/whatsapp.js';
 
 export const getAllOrders = async (req, res) => {
   try {
@@ -18,7 +19,7 @@ export const getAllOrders = async (req, res) => {
 };
 
 export const updateOrderStatus = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params;  
   const { status } = req.body;
 
   if (!status) {
@@ -26,6 +27,16 @@ export const updateOrderStatus = async (req, res) => {
   }
 
   try {
+    // const { order, error: fetchError } = await supabase
+    //   .from('orders')
+    //   .select("*")
+    //   .eq('order_id', id)
+    //   .single();
+
+    // if (fetchError || !order) {
+    //   return res.status(404).json({ error: 'Order not found' });
+    // }
+    
     const { data, error } = await supabase
       .from('orders')
       .update({ status, updated_at: new Date().toISOString() })

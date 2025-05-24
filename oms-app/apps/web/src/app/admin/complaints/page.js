@@ -16,7 +16,7 @@ export default function AdminComplaintsPage() {
 
   const statusFlow = {
     'Open': 'Processing',
-    'Processing': 'Under Review',
+    'Processing': 'Under Review',  
     'Under Review': 'Resolved',
     'Resolved': 'Resolved',
     'Closed': 'Closed'
@@ -66,7 +66,7 @@ export default function AdminComplaintsPage() {
       'Status',
       'Resolution Notes',
       'Date',
-      'Resolution Date'
+      'Resolution Date',
     ].join(','));
 
     data.forEach(c => {
@@ -121,6 +121,7 @@ export default function AdminComplaintsPage() {
       header: 'Resolution Notes', 
       accessor: 'resolution_notes',
       render: (row) => {
+        
         const notes = row.resolution_notes || '-';
         return (
           <span title={notes} className="max-w-xs truncate">

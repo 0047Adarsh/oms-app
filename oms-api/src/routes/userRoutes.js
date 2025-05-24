@@ -91,14 +91,69 @@ router.get('/', async (req, res) => {
 });
 
 // POST create new user
+// router.post('/', async (req, res) => {
+//   const { customer_name, phone, moq, buffer_days, bottle_volumes, password } = req.body;
+
+//   if (!customer_name || !password) {
+//     return res.status(400).json({ error: 'Customer name and password are required' });
+//   }
+
+//   try {
+//     const { data, error } = await supabase
+//       .from('customers')
+//       .insert([
+//         {
+//           customer_name,
+//           phone,
+//           moq: moq || 10,
+//           buffer_days: buffer_days || 3,
+//           bottle_volumes: bottle_volumes ? JSON.stringify(bottle_volumes) : null,
+//           password
+//         }
+//       ])
+//       .select()
+//       .single();
+
+//     if (error) throw error;
+
+//     res.status(201).json(data);
+//   } catch (error) {
+//     console.error('POST /api/customers failed:', error.message);
+//     res.status(500).json({ error: 'Failed to create user' });
+//   }
+// });
+
 router.post('/', async (req, res) => {
-  const { customer_name, phone, moq, buffer_days, bottle_volumes, password } = req.body;
+  const {
+    customer_name,
+    phone,
+    moq,
+    buffer_days,
+    bottle_volumes,
+    password
+  } = req.body;
 
   if (!customer_name || !password) {
-    return res.status(400).json({ error: 'Customer name and password are required' });
+    return res.status(400).json({
+      error: 'Customer name and password are required'
+    });
   }
 
   try {
+    // Safely parse bottle_volumes if it's a string
+    let parsedBottleVolumes = bottle_volumes;
+
+    if (typeof bottle_volumes === 'string') {
+      try {
+        parsedBottleVolumes = JSON.parse(bottle_volumes);
+        if (!Array.isArray(parsedBottleVolumes)) {
+          parsedBottleVolumes = [];
+        }
+      } catch (e) {
+        parsedBottleVolumes = [];
+      }
+    }
+
     const { data, error } = await supabase
       .from('customers')
       .insert([
@@ -107,7 +162,7 @@ router.post('/', async (req, res) => {
           phone,
           moq: moq || 10,
           buffer_days: buffer_days || 3,
-          bottle_volumes: bottle_volumes ? JSON.stringify(bottle_volumes) : null,
+          bottle_volumes: parsedBottleVolumes, // ✅ Always send as array
           password
         }
       ])
