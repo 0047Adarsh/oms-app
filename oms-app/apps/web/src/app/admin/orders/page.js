@@ -34,7 +34,7 @@ export default function AdminOrdersPage() {
 
   const exportToCSV = (data) => {
     const csvRows = [];
-    csvRows.push(['Order ID', 'Customer', 'Order Date','Phone', 'Bottle Type', 'Quantity', 'Delivery Date', 'Status'].join(','));
+    csvRows.push(['Order ID', 'Customer Name', 'Order Date','Phone Number', 'Bottle Type', 'Quantity', 'Delivery Date', 'Status'].join(','));
     data.forEach((order) => {
       csvRows.push(
         [

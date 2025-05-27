@@ -29,7 +29,7 @@ export default function OrderStatusUpdateButton({ order, onUpdate }) {
       const res = await fetch(`http://localhost:4000/api/orders/${currentOrder.order_id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: nextStatus })
+        body: JSON.stringify({ status: nextStatus, phone:currentOrder.phone })
       });
 
       if (!res.ok) throw new Error('Update failed');

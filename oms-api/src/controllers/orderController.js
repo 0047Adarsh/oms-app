@@ -1,5 +1,6 @@
 // controllers/orderController.js
 import supabase from '../db/supabaseClient.js';
+import { sendWhatsAppMessage } from '../utils/whatsApp.js';
 
 export const getAllOrders = async (req, res) => {
   try {
@@ -19,23 +20,13 @@ export const getAllOrders = async (req, res) => {
 
 export const updateOrderStatus = async (req, res) => {
   const { id } = req.params;  
-  const { status } = req.body;
+  const { status, phone } = req.body;
 
   if (!status) {
     return res.status(400).json({ error: 'Status is required' });
   }
 
   try {
-    // const { order, error: fetchError } = await supabase
-    //   .from('orders')
-    //   .select("*")
-    //   .eq('order_id', id)
-    //   .single();
-
-    // if (fetchError || !order) {
-    //   return res.status(404).json({ error: 'Order not found' });
-    // }
-    
     const { data, error } = await supabase
       .from('orders')
       .update({ status, updated_at: new Date().toISOString() })
@@ -44,6 +35,24 @@ export const updateOrderStatus = async (req, res) => {
       .single();
 
     if (error) throw error;
+
+     const messageBody = `
+      🚀 Your order has been updated!
+
+      📦 Order ID: ${id}
+      🔔 Status: ${status}
+      📅 Updated At: ${new Date().toLocaleString()}
+
+      Thank you for choosing us! 💙
+      `;
+
+    const whatsappResult = await sendWhatsAppMessage(phone, messageBody);
+
+    if (whatsappResult) {
+      console.log(`✅ WhatsApp message sent to ${phone}`);
+    } else {
+      console.warn(`⚠️ Failed to send WhatsApp message to ${phone}`);
+    }
 
     console.log("✅ Fetched Orders:", data);
     res.json({ message: 'Status updated', order: data });

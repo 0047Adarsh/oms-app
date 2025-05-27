@@ -77,6 +77,7 @@
 
 import express from 'express';
 import supabase from '../db/supabaseClient.js';
+import { sendWhatsAppMessage } from '../utils/whatsApp.js';
 
 const router = express.Router();
 
@@ -138,7 +139,7 @@ router.get('/', async (req, res) => {
 
 router.patch('/:id/status', async (req, res) => {
   const { id } = req.params;
-  const { status, resolution_notes } = req.body;
+  const { status, resolution_notes, phone } = req.body;
 
   try {
     const updateData = {};
@@ -177,6 +178,25 @@ router.patch('/:id/status', async (req, res) => {
       }
       throw error;
     }
+
+    const messageBody = `
+          🚀 Your complaint has been updated!
+    
+          📦 Complaint ID: ${id}
+          🔔 Status: ${status || "Not Updated"}
+          🔔 Notes: ${resolution_notes || "In Progress" }
+          📅 Updated At: ${new Date().toLocaleString()}
+    
+          Thank you for choosing us! 💙
+          `;
+    
+        const whatsappResult = await sendWhatsAppMessage(phone, messageBody);
+    
+        if (whatsappResult) {
+          console.log(`✅ WhatsApp message sent to ${phone}`);
+        } else {
+          console.warn(`⚠️ Failed to send WhatsApp message to ${phone}`);
+        }
 
     res.json({ message: 'Complaint updated successfully', complaint: data });
   } catch (err) {

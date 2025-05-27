@@ -39,7 +39,7 @@ export default function ComplaintStatusUpdateButton({ complaint, onUpdate }) {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          status: nextStatus
+          status: nextStatus, phone:currentComplaint.phone_number
         })
       });
 
@@ -67,7 +67,7 @@ export default function ComplaintStatusUpdateButton({ complaint, onUpdate }) {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        resolution_notes: resolutionNotes.trim() || null
+        resolution_notes: resolutionNotes.trim() || null, phone:currentComplaint.phone_number
       })
     });
 
