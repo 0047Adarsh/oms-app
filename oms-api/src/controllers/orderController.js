@@ -1,6 +1,6 @@
 // controllers/orderController.js
 import supabase from '../db/supabaseClient.js';
-import { sendWhatsAppMessage } from '../utils/whatsapp.js';
+import { sendWhatsAppMessage } from '../utils/whatsApp.js';
 
 export const getAllOrders = async (req, res) => {
   try {
